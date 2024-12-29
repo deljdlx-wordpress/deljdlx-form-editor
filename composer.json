@@ -1,0 +1,24 @@
+{
+    "name": "jdlxt/form-editor",
+    "type": "library",
+    "authors": [
+        {
+            "name": "Julien Delsescaux",
+            "email": "none@mail.com"
+        }
+    ],
+    "require": {
+
+    },
+    "config": {
+        "vendor-dir": "composer",
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
+    },
+    "autoload": {
+        "psr-4" : {
+            "Deljdlx\\FormEditor\\" : "./src/class"
+        }
+    }
+}
