@@ -1,9 +1,9 @@
-@extends('layouts-new.common.blank')
+@extends('__core.layouts.empty')
 @section('page-title')
-    Mon bureau
+    Form editor
 @endsection
 
-@section('body')
+@section('body-content')
 
 {{-- 2 column div with tailwind --}}
 <div x-data="application" class="skill-tree-editor no-pcl-style">
@@ -63,58 +63,58 @@
 <script>
     document.addEventListener('DOMContentLoaded', () => {
 
-        console.log('%ceditor.blade.php :: 65 =============================', 'color: #f00; font-size: 1rem');
-        console.log(wp);
+        // console.log('%ceditor.blade.php :: 65 =============================', 'color: #f00; font-size: 1rem');
+        // console.log(wp);
 
-        // Initialiser l'éditeur WYSIWYG
-        wp.editor.initialize('my-wysiwyg-editor', {
-            tinymce: {
-                wpautop: true,
-                plugins: 'link',
-                toolbar1: 'bold italic underline | alignleft aligncenter alignright | link',
-            },
-            quicktags: true
-        });
-    
-        // Sauvegarder le contenu
-        $('#save-button').click(function () {
-            const content = wp.editor.getContent('my-wysiwyg-editor');
-            console.log('Contenu sauvegardé :', content);
-        });
+        // // Initialiser l'éditeur WYSIWYG
+        // wp.editor.initialize('my-wysiwyg-editor', {
+        //     tinymce: {
+        //         wpautop: true,
+        //         plugins: 'link',
+        //         toolbar1: 'bold italic underline | alignleft aligncenter alignright | link',
+        //     },
+        //     quicktags: true
+        // });
 
-        // =========================== 
-        // =========================== 
+        // // Sauvegarder le contenu
+        // $('#save-button').click(function () {
+        //     const content = wp.editor.getContent('my-wysiwyg-editor');
+        //     console.log('Contenu sauvegardé :', content);
+        // });
 
-        let mediaFrame; // Variable pour stocker la fenêtre modale
+        // // ===========================
+        // // ===========================
 
-        $('#open-media-library').on('click', function (e) {
-            e.preventDefault();
+        // let mediaFrame; // Variable pour stocker la fenêtre modale
 
-            // Si la fenêtre modale existe déjà, réutilisez-la
-            if (mediaFrame) {
-                mediaFrame.open();
-                return;
-            }
+        // $('#open-media-library').on('click', function (e) {
+        //     e.preventDefault();
 
-            // Créer une nouvelle fenêtre modale pour la médiathèque
-            mediaFrame = wp.media({
-                title: 'Choisir un fichier',
-                button: {
-                    text: 'Utiliser ce fichier',
-                },
-                multiple: false // Permet de sélectionner un seul fichier
-            });
+        //     // Si la fenêtre modale existe déjà, réutilisez-la
+        //     if (mediaFrame) {
+        //         mediaFrame.open();
+        //         return;
+        //     }
 
-            // Quand un fichier est sélectionné dans la médiathèque
-            mediaFrame.on('select', function () {
-                const attachment = mediaFrame.state().get('selection').first().toJSON();
-                $('#media-url').val(attachment.url); // Met à jour l'URL dans un champ texte
-                console.log('Fichier sélectionné :', attachment);
-            });
+        //     // Créer une nouvelle fenêtre modale pour la médiathèque
+        //     mediaFrame = wp.media({
+        //         title: 'Choisir un fichier',
+        //         button: {
+        //             text: 'Utiliser ce fichier',
+        //         },
+        //         multiple: false // Permet de sélectionner un seul fichier
+        //     });
 
-            // Ouvrir la fenêtre modale
-            mediaFrame.open();
-        });
+        //     // Quand un fichier est sélectionné dans la médiathèque
+        //     mediaFrame.on('select', function () {
+        //         const attachment = mediaFrame.state().get('selection').first().toJSON();
+        //         $('#media-url').val(attachment.url); // Met à jour l'URL dans un champ texte
+        //         console.log('Fichier sélectionné :', attachment);
+        //     });
+
+        //     // Ouvrir la fenêtre modale
+        //     mediaFrame.open();
+        // });
 
 
 

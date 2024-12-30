@@ -3,15 +3,6 @@ const deljdlxTreeStore = {
     selectedNode: null,
     previousSelectedNode: null,
 
-    values: {
-        S: 5,
-        P: 5,
-        E: 5,
-        C: 5,
-        I: 5,
-        A: 5,
-        L: 5,
-    },
 
     availableAttributePoints: 10,
     availableSkillPoints: 100,

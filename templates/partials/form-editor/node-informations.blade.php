@@ -24,6 +24,7 @@
                     <option value="wysiwyg">Texte riche</option>
                     <option value="number">Nombre</option>
                     <option value="image">Image</option>
+                    <option value="rating">Rating</option>
                     <option value="file">Fichier</option>
                     <option value="video">Video</option>
                     <option value="map">Map</option>

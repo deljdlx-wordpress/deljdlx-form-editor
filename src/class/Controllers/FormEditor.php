@@ -12,9 +12,9 @@ class FormEditor extends BaseController
 
     ];
 
-    public static $appendJs = [
+    // public static $appendJs = [
 
-    ];
+    // ];
 
     public static $appendCss = [
         'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
