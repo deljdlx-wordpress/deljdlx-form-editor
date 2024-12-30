@@ -269,7 +269,7 @@
                     <button class="btn btn-primary debug" x-on:click="console.log(store)">Debug</button>
                     <button class="btn btn-primary save" x-on:click="save()">Save</button>
                 </div>
-                <input style="border: solid 1px #f0f" id="entity_id" type="hidden" name="entity_id" value="{{ $entity->ID }}">
+                <input style="border: solid 1px #f0f" id="entity_id" type="hiddene" name="entity_id" value="{{ $entity->ID }}">
 
 
                 <template x-if="store.descriptor">
