@@ -80,6 +80,24 @@ const store = {
 
             this.attributes[code].errors = [];
 
+            if(attributeDescriptor.data.type === 'fields-group') {
+                for (let valueIndex in attribute.values) {
+                    this.attributes[code].errors[valueIndex] = {};
+                    for(let subfieldCode in attributeDescriptor.children) {
+                        const subfieldDescriptor = attributeDescriptor.children[subfieldCode];
+                        this.attributes[code].errors[valueIndex][subfieldDescriptor.data.code] = false;
+
+                        if (subfieldDescriptor.data.mandatory) {
+                            if (!attribute.values[valueIndex][subfieldDescriptor.data.code]) {
+                                this.attributes[code].errors[valueIndex][subfieldDescriptor.data.code] = 'Ce champ est obligatoire';
+                                valid = false;
+                            }
+                        }
+
+                    }
+                }
+            }
+
             if (attributeDescriptor.data.mandatory) {
                 if (attribute.values.length) {
                     for (let index in attribute.values) {
