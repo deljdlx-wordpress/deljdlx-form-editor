@@ -15,213 +15,6 @@
     <link rel="stylesheet" href="https://releases.jquery.com/git/ui/jquery-ui-git.css">
     <script src="https://code.jquery.com/ui/1.14.1/jquery-ui.js"></script> --}}
 
-
-
-    <style>
-
-        .ui-widget-header {
-            border: none;
-        }
-
-        .ui-widget-content {
-            border: none;
-        }
-        .ui-widget.ui-widget-content {
-            border: none;
-        }
-        .ui-tabs .ui-tabs-nav {
-            padding: 0;
-        }
-
-        /* .ui-tabs-vertical { width: 55em; } */
-        .ui-tabs-vertical .ui-tabs-nav { /*padding: .2em .1em .2em .2em; float: left; width: 12em; */ }
-        .ui-tabs-vertical .ui-tabs-nav li { clear: left; width: 100%; border-bottom-width: 1px !important; border-right-width: 0 !important; margin: 0 -1px .2em 0; }
-        .ui-tabs-vertical .ui-tabs-nav li a { display:block; }
-        .ui-tabs-vertical .ui-tabs-nav li.ui-tabs-active {
-            padding-bottom: 0; padding-right: .1em; border-right-width: 1px;
-            background-color: rgb(var(--pcl-primary-color-10));
-        }
-        .ui-tabs-vertical .ui-tabs-panel { padding: 0;}
-
-
-        /* ============================================ */
-
-        .create-entity-container fieldset {
-            border: none;
-        }
-
-        .cluster-container {
-            margin: 0;
-            border: solid 2px rgb(var(--pcl-primary-color-10));
-            background-color: #eee;
-            border-radius: 0 1rem 1rem 0;
-            overflow: hidden;
-            padding: 1rem;
-            gap: 1rem;
-        }
-
-        .attribute-container {
-            padding: 1rem;
-            height: 100%;
-            background-color: #fff;
-            border: solid 1px #ccc;
-            border-radius: 1rem;
-            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
-
-            border: solid 2px #f0f;
-        }
-
-        .attribute-name {
-            font-size: 16px;
-            font-weight: bold;
-        }
-
-        .attribute-values-container {
-            gap: 1rem;
-        }
-
-        /* ========================================== */
-
-        .fields-group-container {
-            display: flex;
-            flex-direction: column;
-            width: 100%
-        }
-
-        .subfield-container {
-            background-color: #eee;
-            position: relative;
-            margin-bottom: 1rem;
-            padding: 1rem;
-            /* flex-grow: 1; */
-        }
-
-        .subfield-container--image {
-            min-height: 120px;
-        }
-
-        .subfield-name {
-            font-weight: bold;
-        }
-
-        .subfield-container:last-child {
-            margin-bottom: 0;
-        }
-
-        /* ========================================== */
-
-
-
-        .value-container {
-            position: relative;
-            padding: 0.5rem;
-            background-color: #fff;
-            border: solid 1px #ccc;
-            border-radius: 1rem;
-            box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
-        }
-
-        .value-container--image {
-            min-height: 120px;
-        }
-
-
-
-        .fieldset-header {
-            display: flex;
-            justify-content: flex-end;
-            gap: 1rem;
-            background-color: #aaa;
-            color: #fff;
-            margin: -0.5rem -0.5rem 1rem -0.5rem;
-            padding: 4px;
-            border-radius: 1rem 1rem 0 0;
-        }
-
-        fieldset {
-            position: relative;
-        }
-
-
-
-        .remove-value {
-            position :absolute;
-            right: 0;
-            top: 0;
-        }
-
-        .attribute-button-reset-value {
-            border: solid 1px #ccc;
-            background-color: #fff;
-            border-radius: 1rem 0 0 1rem;
-            padding: 0 1rem;
-        }
-
-        .attribute-button-reset-value.attribute-button-reset-value--image {
-            position: absolute;
-            right: 4px;
-            top: 4px;
-            border-radius: 4px;
-            padding: 0.5rem;
-        }
-
-
-        /* next element of type input */
-        .attribute-button-reset-value + input {
-            border-radius: 0 1rem 1rem 0;
-        }
-
-        .attribute-image-container {
-            position: relative;
-        }
-
-        .wp-editor-wrap {
-            width: 100%;
-        }
-
-        .acf-field {
-            margin-bottom: 1rem;
-            border-top: solid 1px #ccc;
-        }
-
-        .acf-field:first-of-type {
-            border-top: none;
-        }
-
-        /* ============================================ */
-
-
-
-        .button-choose-image {
-            position: absolute;
-            top: 4px;
-            left: 4px;
-        }
-
-
-        /* ============================================ */
-
-
-        .attribute-value--image {
-            width: 100%;
-            border: solid 1px;
-        }
-
-        .attribute-value--youtube-iframe {
-            margin-top: 0.5rem;
-            width: 100%;
-            height: 400px;
-        }
-
-        .attribute-value--map-container {
-            margin-top: 0.5rem;
-            border: solid 1px;
-            height: 500px;
-            width: 100%;
-        }
-
-    </style>
-
   <script>
     document.addEventListener('DOMContentLoaded', () => {
         jQuery( "#tabs" ).tabs(
@@ -248,23 +41,6 @@
     <section>
         <div class="flex justify-center">
 
-            <script>
-
-
-
-                document.addEventListener('alpine:init', () => {
-                    const reactiveStore = Alpine.reactive(store);
-                    Alpine.data('application', () => reactiveStore);
-
-                    reactiveStore.loadDescriptor({!!$descriptor->getField('json')!!});
-
-                    const values = {!!json_encode($values)!!};
-                    reactiveStore.loadValues(values);
-                });
-
-
-            </script>
-
             <div class="create-entity-container container edit-entity-container pt-10" x-data="application" x-init="initializeMediaLibrary()">
                 <div class="flex">
                     <button class="btn btn-primary debug" x-on:click="console.log(store)">Debug</button>
@@ -290,105 +66,23 @@
                                                 <template x-for="(attributeDescriptor, attributeIndex) in cluster.children">
                                                     <div class="attribute-container" :class="getAttributeContainerCssClass(attributeDescriptor)">
 
+
+                                                        <h3 class="attribute-name">
+                                                            <i class="ri-error-warning-line" x-show="attributeDescriptor.data.mandatory"></i>
+                                                            <span  x-html="attributeDescriptor.text"></span>
+                                                        </h3>
+
+                                                        <div class=" attribute-values-container grid grid-cols-12">
+                                                            <template x-if="attributeDescriptor.data.type !=='fields-group'">
+                                                                @include('partials.form-viewer.attribute-field')
+                                                            </template>
+                                                            <template x-if="attributeDescriptor.data.type ==='fields-group'">
+                                                                @include('partials.form-viewer.fields-group')
+                                                            </template>
                                                         <div>
-                                                            <h3 class="attribute-name" x-html="attributeDescriptor.text"></h3>
-
-                                                            <div
-                                                                class="
-                                                                    attribute-values-container
-                                                                    grid grid-cols-12
-                                                                "
-                                                            >
-
-                                                                    <template x-if="attributeDescriptor.data.type !=='fields-group'">
-                                                                        <template x-for="(value, valueIndex) in attributes[attributeDescriptor.data.code].values">
-                                                                            <div
-                                                                                class="
-                                                                                    value-container
-                                                                                "
-                                                                                :class="
-                                                                                    'value-container--' + attributeDescriptor.data.code +
-                                                                                    ' value-container--' +attributeDescriptor.data.code +
-                                                                                    (attributeDescriptor.data.type === 'fields-group'
-                                                                                        ? ' col-span-' + attributeDescriptor.data.width
-                                                                                        : ' col-span-12'
-                                                                                    )
-                                                                                "
-                                                                            >
-                                                                                <div>
-                                                                                    <fieldset>
-                                                                                        <div class="flex gap-4 items-center">
-                                                                                            <div class="w-full" x-html="renderFieldset(attributeDescriptor, null, valueIndex)"></div>
-                                                                                        </div>
-                                                                                    </fieldset>
-                                                                                </div>
-                                                                            </div>
-                                                                        </template>
-                                                                    </template>
-
-                                                                    <template x-if="attributeDescriptor.data.type ==='fields-group'">
-                                                                        <template x-for="(subValue, subValueIndex) in attributes[attributeDescriptor.data.code].values">
-                                                                            <div
-                                                                                class="
-                                                                                    value-container
-                                                                                "
-                                                                                :class="
-                                                                                    'value-container--' + attributeDescriptor.data.code +
-                                                                                    ' value-container--' +attributeDescriptor.data.code +
-                                                                                    (attributeDescriptor.data.type === 'fields-group'
-                                                                                        ? ' col-span-' + attributeDescriptor.data.width
-                                                                                        : ' col-span-12'
-                                                                                    )
-                                                                                "
-                                                                            >
-
-                                                                                <div x-show="subValueIndex > 0"class="fieldset-header">
-                                                                                    <button
-                                                                                        x-on:click="deleteValue(
-                                                                                            attributeDescriptor.data.code,
-                                                                                            subValueIndex,
-                                                                                        )"
-                                                                                        class="btn ri-delete-bin-fill"
-                                                                                    ></button>
-                                                                                </div>
-
-
-                                                                                <div class="fields-group-container">
-                                                                                    <template x-for="(subfieldDescriptor, subfieldIndex) in attributeDescriptor.children">
-                                                                                        <fieldset>
-                                                                                            <div class="flex gap-4 items-center">
-                                                                                                <div
-                                                                                                    class="subfield-container w-full"
-                                                                                                    :class="
-                                                                                                        'subfield-container--' + subfieldDescriptor.data.type +
-                                                                                                        ' subfield-container--' + subfieldDescriptor.data.code
-                                                                                                    "
-                                                                                                >
-                                                                                                    <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
-
-                                                                                                        <div>
-                                                                                                            <div x-html="renderFieldset(
-                                                                                                                subfieldDescriptor,
-                                                                                                                attributeDescriptor.data.code,
-                                                                                                                subValueIndex
-                                                                                                            )"></div>
-                                                                                                        </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </fieldset>
-                                                                                    </template>
-                                                                                </div>
-                                                                            </div>
-                                                                        </template>
-                                                                    </template>
-
-
-                                                                <div>
-                                                            </div>
-                                                        </div>
                                                     </div>
 
-
+                                                    {{-- Repeat field part --}}
                                                     <template x-if="attributeDescriptor.data.repeat">
                                                         <div class="mt-4">
                                                             <button
@@ -400,15 +94,6 @@
                                                         </div>
                                                     </template>
 
-
-
-
-
-
-
-
-
-
                                                 </template>
                                             </div>
                                         </div>
@@ -417,9 +102,21 @@
                         </div>
                     </div>
                 </template>
-
-
             </div>
     </section>
+
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            const reactiveStore = Alpine.reactive(store);
+            Alpine.data('application', () => reactiveStore);
+
+            reactiveStore.loadDescriptor({!!$descriptor->getField('json')!!});
+
+            const values = {!!json_encode($values)!!};
+            reactiveStore.loadValues(values);
+        });
+    </script>
+
 @endsection
 

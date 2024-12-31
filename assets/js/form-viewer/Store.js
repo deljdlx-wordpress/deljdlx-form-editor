@@ -71,21 +71,23 @@ const store = {
     // ===================================================
 
     validateVariables() {
-        return true;
+
         let valid = true;
 
         for (let code in this.attributes) {
-            this.attributes[code].data.valueErrors = [];
             const attribute = this.attributes[code];
+            const attributeDescriptor = this.descriptors[code];
 
-            if (attribute.data.mandatory) {
+            this.attributes[code].errors = [];
+
+            if (attributeDescriptor.data.mandatory) {
                 if (attribute.values.length) {
                     for (let index in attribute.values) {
-                        this.attributesErrors[code][index] = false;
+                        attribute.errors[index] = false;
+
                         if (!attribute.values[index].length) {
                             console.log('ERROR ON ' + code + ' ' + index);
-
-                            this.attributesErrors[code][index] = 'Ce champ est obligatoire';
+                            attribute.errors[index] = 'Ce champ est obligatoire';
                             valid = false;
                         }
                     }
@@ -411,42 +413,6 @@ const store = {
       `;
     },
 
-    renderCluster(cluster, index) {
-        console.log('%cRENDER CLUSTER ' + index, 'color: #f00; font-size: 2rem');
-
-
-        let content = '';
-
-        content += `<div class="cluster-container grid grid-cols-12">`;
-        for (let i = 0; i < cluster.children.length; i++) {
-            const attribute = cluster.children[i];
-            if (attribute.data.code) {
-                let cssClass = ''
-                if (attribute.data.type === 'fields-group') {
-                    cssClass = 'col-span-12';
-                }
-                else if (attribute.data.width) {
-                    cssClass = 'col-span-' + attribute.data.width;
-                }
-                else {
-                    cssClass = 'col-span-12';
-                }
-
-                content += `<div class="attribute-container ${cssClass}">`;
-                    content += this.renderAttribute(attribute, i);
-                content += `</div>`;
-            }
-        }
-
-        content += `</div>`;
-
-        const template = cluster.data.template ?? '';
-        if (template) {
-            content = template.replace('${CONTENT}', content);
-        }
-
-        return content;
-    },
 
     getAttributeContainerCssClass(attribute) {
         let cssClass = ''
@@ -464,82 +430,6 @@ const store = {
     },
 
     // ===================================================
-
-    renderAttribute(attribute, index, model, parentAttributeCode = null) {
-
-
-        console.log('%cStore.js :: 427 RENDER :' + attribute.data.code,  'color: #f00; font-size: 2rem');
-
-
-        let content = '';
-
-        content += `
-          <div>
-              <h3 class="attribute-name">${attribute.text}</h3>`;
-
-        if (attribute.data.description) {
-            content += `
-                      <p>${attribute.data.description}</p>
-                  `;
-        }
-        content += `
-              <div
-                  class="
-                      attribute-values-container
-                      grid grid-cols-12
-                  "
-              >`;
-
-
-        for (let i = 0; i < this.attributes[attribute.data.code].values.length; i++) {
-
-            if (!model) {
-                model = `attributes['${attribute.data.code}'].values[${i}]`;
-            }
-
-            // model = `attributes['${attribute.data.code}'].values[${i}]`;
-
-
-            let cssClass = '';
-            if (attribute.data.type === 'fields-group') {
-                cssClass = 'col-span-' + attribute.data.width
-            }
-            else {
-                cssClass = 'col-span-12';
-            }
-
-            content += `
-                          <div
-                              class="
-                                  value-container
-                                  value-container--${attribute.data.type}
-                                  value-container--${attribute.data.code}
-                                  ${cssClass}
-                              ">`;
-            const field = this.renderFieldset(
-                attribute,
-                i,
-                model,
-                parentAttributeCode,
-            )
-            content += field;
-            content += `</div>`;
-        }
-        content += `</div>`;
-
-        if (attribute.data.repeat) {
-            content += `
-                      <div class="mt-4">
-                          <button x-on:click="repeatField('${attribute.data.code}')" class="btn repeat">
-                              <i class="ri-add-circle-line"></i>
-                          </button>
-                      </div>
-                  `;
-        }
-        content += `</div>`;
-
-        return content;
-    },
 
     repeatField(attributeCode) {
 
@@ -581,9 +471,9 @@ const store = {
       `;
 
         content += '<fieldset>';
-        content += '<div class="flex gap-4 items-center">';
-            content += this.renderer.renderField(attribute, parentField, index)
-        content += '</div>';
+            content += '<div class="flex gap-4 items-center">';
+                content += this.renderer.renderField(attribute, parentField, index)
+            content += '</div>';
 
         // content += `
         //     <div role="alert" class="alert alert-error p-1 mt-1 " x-show="attributesErrors[attribute.data.code][index]">
