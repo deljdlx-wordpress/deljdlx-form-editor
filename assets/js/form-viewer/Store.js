@@ -182,36 +182,35 @@ const store = {
         this.attributes[attributeCode].values.splice(index, 1);
     },
 
-    setValue(attributeCode, parentField, index, value,) {
-        if (parentField) {
-
-            if(!this.attributes[parentField]) {
-                console.error('No values for attribute ' + parentField);
+    setValue(attributeCode, parentFieldCode, index, value,) {
+        if (parentFieldCode) {
+            if(!this.attributes[parentFieldCode]) {
+                console.error('No values for attribute ' + parentFieldCode);
             }
 
-            if(!this.attributes[parentField].values) {
-                console.error('No values for attribute ' + parentField + '[' + index + ']');
+            if(!this.attributes[parentFieldCode].values) {
+                console.error('No values for attribute ' + parentFieldCode + '[' + index + ']');
             }
-            this.attributes[parentField].values[index][attributeCode] = value;
-            return this.attributes[parentField].values[index][attributeCode];
+            this.attributes[parentFieldCode].values[index][attributeCode] = value;
+            return this.attributes[parentFieldCode].values[index][attributeCode];
         }
         this.attributes[attributeCode].values[index] = value;
 
         return this.attributes[attributeCode].values[index];
     },
 
-    getModel(attributeCode, parentField, index) {
+    getModel(attribute, parentField, index) {
         if (parentField) {
-            return `attributes['${parentField}'].values[${index}]['${attributeCode}']`;
+            return `attributes['${parentField.data.code}'].values[${index}]['${attribute.data.code}']`;
         }
-        return `attributes['${attributeCode}'].values[${index}]`;
+        return `attributes['${attribute.data.code}'].values[${index}]`;
     },
 
-    getValue(attributeCode, parentField, index) {
+    getValue(attribute, parentField, index) {
         if (parentField) {
-            return this.attributes[parentField].values[index][attributeCode];
+            return this.attributes[parentField.data.code].values[index][attribute.data.code];
         }
-        return this.attributes[attributeCode].values[index];
+        return this.attributes[attribute.data.code].values[index];
     },
 
     // ===================================================

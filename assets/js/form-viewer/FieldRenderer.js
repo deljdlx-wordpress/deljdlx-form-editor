@@ -8,49 +8,49 @@ class FieldRenderer
     this.attributes = store.attributes;
   }
 
-  renderField(attributeDescriptor, parentField, index, model) {
+  renderField(attributeDescriptor, parentFieldDescriptor, index, model) {
     let content = '';
 
     switch(attributeDescriptor.data.type) {
       case 'text':
-        content += this.renderText(attributeDescriptor, parentField, index, model);
+        content += this.renderText(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'number':
-        content += this.renderNumber(attributeDescriptor, parentField, index, model);
+        content += this.renderNumber(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'rating':
-        content += this.renderRating(attributeDescriptor, parentField, index, model);
+        content += this.renderRating(attributeDescriptor, parentFieldDescriptor, index, model);
           break;
       case 'wysiwyg':
-        content += this.renderWysiwyg(attributeDescriptor, parentField, index, model);
+        content += this.renderWysiwyg(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'image':
-        content += this.renderImage(attributeDescriptor, parentField, index, model);
+        content += this.renderImage(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'video':
-        content += this.renderVideo(attributeDescriptor, parentField, index, model);
+        content += this.renderVideo(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'map':
-        content += this.renderMap(attributeDescriptor, parentField, index, model);
+        content += this.renderMap(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'toggle':
-        content += this.renderToggle(attributeDescriptor, parentField, index, model);
+        content += this.renderToggle(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'file':
-        content += this.renderFile(attributeDescriptor, parentField, index, model);
+        content += this.renderFile(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       case 'select':
-        content += this.renderSelect(attributeDescriptor, parentField, index, model);
+        content += this.renderSelect(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
       default:
-          content += this.renderText(attributeDescriptor, parentField, index, model);
+          content += this.renderText(attributeDescriptor, parentFieldDescriptor, index, model);
     }
 
     return content;
   }
 
   generateId(attributeDescriptor, parentField, index) {
-    const id = (parentField ? parentField + '_' : '') + attributeDescriptor.data.code + '_' + index;
+    const id = (parentField ? parentField.data.code + '_' : '') + attributeDescriptor.data.code + '_' + index;
     return id;
   }
 
@@ -65,7 +65,7 @@ class FieldRenderer
         disabled = 'disabled="disabled"';
     }
 
-    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
 
     //const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled' : '';
 
@@ -85,7 +85,7 @@ class FieldRenderer
   renderNumber(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
     const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled="true"' : '';
-    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
 
 
     return `
@@ -101,7 +101,7 @@ class FieldRenderer
   }
 
   renderRating(attributeDescriptor, parentField, index) {
-    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+    const value = this.store.getValue(attributeDescriptor, parentField, index);
     let content = ``;
       content += `<div class="rating">`;
         for(let i = 1; i <= 5; i++) {
@@ -115,7 +115,7 @@ class FieldRenderer
               type="radio"
               name="${attributeDescriptor.data.code + '_' + parentField + '_' + index}"
               class="mask mask-star-2"
-              @click="setRating('${attributeDescriptor.data.code}', '${parentField}', '${index}', ${i})"
+              @click="setRating('${attributeDescriptor.data.code}', '${parentField.data.code}', '${index}', ${i})"
             />`;
         }
         content += `</div>`;
@@ -126,7 +126,7 @@ class FieldRenderer
 
   renderWysiwyg(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
-    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
 
     let content = ``;
     content += `
@@ -138,7 +138,7 @@ class FieldRenderer
                 console.log('INIT WYSIWYG: ${id}');
                 initializeWysiwygEditor(
                     '${attributeDescriptor.data.code}',
-                    ${(parentField ? "'" + parentField + "'" : 'null')},
+                    ${(parentField ? "'" + parentField.data.code + "'" : 'null')},
                     '${index}',
                     '${id}',
                 );
@@ -155,17 +155,12 @@ class FieldRenderer
   }
 
   renderImage(attributeDescriptor, parentField, index) {
-    const attribute = this.attributes[attributeDescriptor.data.code];
     const id = this.generateId(attributeDescriptor, parentField, index);
-    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    const model = this.store.getModel(attributeDescriptor, parentField, index);
 
     let value = '';
-    if(parentField) {
-        value = this.attributes[parentField].values[index][attributeDescriptor.data.code];
-    }
-    else {
-        value = attribute.values[index];
-    }
+
+    value = this.store.getValue(attributeDescriptor, parentField, index);
 
 
     let content = `<div id="${id}" class="" style="width:100%">`;
@@ -180,7 +175,7 @@ class FieldRenderer
                       "
                       x-on:click="openMediaLibrary(
                           '${attributeDescriptor.data.code}',
-                          ${parentField ? "'" + parentField + "'" : 'null'},
+                          ${parentField ? "'" + parentField.data.code + "'" : 'null'},
                           '${index}',
                       )"
                   >
@@ -248,8 +243,8 @@ class FieldRenderer
 
   renderVideo(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
-    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
-    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+    const model = this.store.getModel(attributeDescriptor, parentField, index);
+    const value = this.store.getValue(attributeDescriptor, parentField, index);
 
     let content = `<div class="grow w-full">`;
         content +=  `<div class="flex">`
@@ -295,8 +290,16 @@ class FieldRenderer
   }
 
   renderMap(attributeDescriptor, parentField, index) {
-    let value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+    let value = this.store.getValue(attributeDescriptor, parentField, index);
     const id = this.generateId(attributeDescriptor, parentField, index);
+
+    if(!value) {
+        value = {
+            caption: '',
+            lat: 0,
+            lng: 0,
+        };
+    }
 
     let content = `
         <div class="grow w-full">
@@ -336,7 +339,7 @@ class FieldRenderer
 
   renderToggle(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
-    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    const model = this.store.getModel(attributeDescriptor, parentField, index);
 
     let content = ``
     content += `
@@ -363,8 +366,8 @@ class FieldRenderer
   }
 
   renderSelect(attributeDescriptor, parentField, index) {
-    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
-    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+    const model = this.store.getModel(attributeDescriptor, parentField, index);
+    const value = this.store.getValue(attributeDescriptor, parentField, index);
 
     let content = ``;
 
@@ -376,16 +379,18 @@ class FieldRenderer
       <div class="flex flex-col">
         <select
           class="select select-bordered w-full max-w-xs"
-          @change="
-            console.log($event.target.value);
-            setValue(
-              '${attributeDescriptor.data.code}',
-              ${parentField ? "'" + parentField + "'" : 'null'},
-              '${index}',
-              $event.target.value
-            )
-          "
+          x-model="${model}"
         >`;
+
+      //   @change="
+      //   console.log($event.target.value);
+      //   setValue(
+      //     '${attributeDescriptor.data.code}',
+      //     ${parentField ? "'" + parentField + "'" : 'null'},
+      //     '${index}',
+      //     $event.target.value
+      //   )
+      // "
 
         content += `
           <option value="" disabled selected>-- Select --</option>

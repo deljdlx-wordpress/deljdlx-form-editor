@@ -41,7 +41,7 @@
                             <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
                             <div x-html="renderFieldset(
                                 subfieldDescriptor,
-                                attributeDescriptor.data.code,
+                                attributeDescriptor,
                                 subValueIndex
                             )"></div>
                         </div>
