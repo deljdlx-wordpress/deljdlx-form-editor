@@ -66,34 +66,47 @@
                                                 <template x-for="(attributeDescriptor, attributeIndex) in cluster.children">
                                                     <div class="attribute-container" :class="getAttributeContainerCssClass(attributeDescriptor)">
 
-
                                                         <h3 class="attribute-name">
                                                             <i class="ri-error-warning-line" x-show="attributeDescriptor.data.mandatory"></i>
                                                             <span  x-html="attributeDescriptor.text"></span>
                                                         </h3>
 
+
                                                         <div class=" attribute-values-container grid grid-cols-12">
-                                                            <template x-if="attributeDescriptor.data.type !=='fields-group'">
-                                                                @include('partials.form-viewer.attribute-field')
-                                                            </template>
-                                                            <template x-if="attributeDescriptor.data.type ==='fields-group'">
-                                                                @include('partials.form-viewer.fields-group')
-                                                            </template>
-                                                        <div>
-                                                    </div>
-
-                                                    {{-- Repeat field part --}}
-                                                    <template x-if="attributeDescriptor.data.repeat">
-                                                        <div class="mt-4">
-                                                            <button
-                                                                x-on:click="repeatField(attributeDescriptor.data.code)"
-                                                                class="btn repeat"
-                                                            >
-                                                                <i class="ri-add-circle-line"></i>
-                                                            </button>
+                                                            {{-- <div
+                                                                class="
+                                                                    value-container
+                                                                "
+                                                                :class="
+                                                                    'value-container--' + attributeDescriptor.data.code +
+                                                                    ' value-container--' +attributeDescriptor.data.code +
+                                                                    (attributeDescriptor.data.type === 'fields-group'
+                                                                        ? ' col-span-' + attributeDescriptor.data.width
+                                                                        : ' col-span-12'
+                                                                    )
+                                                                "
+                                                            > --}}
+                                                                <template x-if="attributeDescriptor.data.type !=='fields-group'">
+                                                                    @include('partials.form-viewer.attribute-field')
+                                                                </template>
+                                                                <template x-if="attributeDescriptor.data.type ==='fields-group'">
+                                                                    @include('partials.form-viewer.fields-group')
+                                                                </template>
+                                                            {{-- </div> --}}
                                                         </div>
-                                                    </template>
 
+                                                        {{-- Repeat field part --}}
+                                                        <template x-if="attributeDescriptor.data.repeat">
+                                                            <div class="mt-4">
+                                                                <button
+                                                                    x-on:click="repeatField(attributeDescriptor.data.code)"
+                                                                    class="btn repeat"
+                                                                >
+                                                                    <i class="ri-add-circle-line"></i>
+                                                                </button>
+                                                            </div>
+                                                        </template>
+                                                    </div>
                                                 </template>
                                             </div>
                                         </div>

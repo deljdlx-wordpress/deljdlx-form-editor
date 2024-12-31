@@ -12,8 +12,6 @@ const store = {
     currentParentAttributeCode: null,
     renderer: null,
 
-    test: 2,
-
     loadDescriptor(descriptor) {
         this.descriptor = Object.freeze(descriptor);
         this.extractAttributes(descriptor);
@@ -30,10 +28,10 @@ const store = {
     init() {
         this.renderer = new FieldRenderer(this);
         console.log("X-INIT");
-        this.$watch("attributes", (newValue, oldValue) => {
-            console.log(JSON.stringify(newValue, null, 4));
-            console.log(JSON.stringify(oldValue, null, 4));
-        });
+        // this.$watch("attributes", (newValue, oldValue) => {
+        //     console.log(JSON.stringify(newValue, null, 4));
+        //     console.log(JSON.stringify(oldValue, null, 4));
+        // });
     },
 
     extractAttributes(descriptor) {
@@ -89,6 +87,10 @@ const store = {
 
                         if (subfieldDescriptor.data.mandatory) {
                             if (!attribute.values[valueIndex][subfieldDescriptor.data.code]) {
+
+                                console.log('%cStore.js :: 93 =============================', 'color: #f00; font-size: 1rem');
+                                console.log('ERROR ON ' + code + ' ' + valueIndex + ' ' + subfieldDescriptor.data.code);
+
                                 this.attributes[code].errors[valueIndex][subfieldDescriptor.data.code] = 'Ce champ est obligatoire';
                                 valid = false;
                             }
@@ -111,6 +113,7 @@ const store = {
                     }
                 }
                 else {
+                    console.log('ERROR ON ' + code);
                     valid = false;
                 }
             }
@@ -126,7 +129,12 @@ const store = {
             return;
         }
 
-        if (!this.validateVariables()) {
+        const valid = this.validateVariables();
+
+        console.log('%cStore.js :: 131 =============================', 'color: #f00; font-size: 1rem');
+        console.log(valid);
+
+        if (!valid) {
             return;
         }
 
@@ -193,12 +201,6 @@ const store = {
     },
 
     getModel(attributeCode, parentField, index) {
-
-        console.log('%cStore.js :: 161 =============================', 'color: #f00; font-size: 1rem');
-        console.log(attributeCode);
-        console.log(parentField);
-        console.log(index);
-
         if (parentField) {
             return `attributes['${parentField}'].values[${index}]['${attributeCode}']`;
         }
@@ -434,7 +436,7 @@ const store = {
 
     getAttributeContainerCssClass(attribute) {
         let cssClass = ''
-        if (attribute.data.type === 'fields-group') {
+        if (attribute.data.type === 'fields-group' && 0) {
             cssClass = 'col-span-12';
         }
         else if (attribute.data.width) {

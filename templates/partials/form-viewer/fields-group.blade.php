@@ -1,22 +1,21 @@
 
 <template x-for="(subValue, subValueIndex) in attributes[attributeDescriptor.data.code].values">
+    {{-- <div> --}}
     <div
         class="
             value-container
         "
         :class="
-            'value-container--' + attributeDescriptor.data.code +
-            ' value-container--' +attributeDescriptor.data.code +
-            (attributeDescriptor.data.type === 'fields-group'
-                ? ' col-span-' + attributeDescriptor.data.width
-                : ' col-span-12'
-            )
+            attributeDescriptor.data.subfieldsWidth
+                ? 'col-span-' + attributeDescriptor.data.subfieldsWidth
+                : 'col-span-12'
         "
     >
 
         {{-- Delete fields group part --}}
-        <div x-show="subValueIndex > 0"class="fieldset-header">
+        <div class="fieldset-header flex justify-end items-center">
             <button
+                x-show="subValueIndex > 0"
                 x-on:click="deleteValue(
                     attributeDescriptor.data.code,
                     subValueIndex,
@@ -26,30 +25,27 @@
         </div>
 
 
-        <div class="fields-group-container">
+        <div class="fields-group-container grid grid-cols-12">
             <template x-for="(subfieldDescriptor, subfieldIndex) in attributeDescriptor.children">
-                <div>
-                    <fieldset>
-                        <div class="flex gap-4 items-center">
-                            <div
-                                class="subfield-container w-full"
-                                :class="
-                                    'subfield-container--' + subfieldDescriptor.data.type +
-                                    ' subfield-container--' + subfieldDescriptor.data.code
-                                "
-                            >
-                                <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
-                                <div x-html="renderFieldset(
-                                    subfieldDescriptor,
-                                    attributeDescriptor.data.code,
-                                    subValueIndex
-                                )"></div>
-                            </div>
+                <div
+                    :class="
+                        subfieldDescriptor.data.width
+                            ? 'col-span-' + subfieldDescriptor.data.width
+                            : 'col-span-12'
+                    "
+                >
+                    <fieldset class="flex gap-4 items-center w-full">
+                        <div
+                            class="subfield-container  w-full"
+                        >
+                            <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
+                            <div x-html="renderFieldset(
+                                subfieldDescriptor,
+                                attributeDescriptor.data.code,
+                                subValueIndex
+                            )"></div>
                         </div>
                     </fieldset>
-
-                    {{-- <pre x-html="JSON.stringify(attributes[attributeDescriptor.data.code].errors, null, 4)"></pre> --}}
-
 
                     <template x-if="attributes[attributeDescriptor.data.code].errors[subValueIndex]">
                         <div
@@ -71,6 +67,7 @@
                             <span x-html="attributes[attributeDescriptor.data.code].errors[subValueIndex][subfieldDescriptor.data.code]"></span>
                         </div>
                     </template>
+
                 </div>
             </template>
         </div>

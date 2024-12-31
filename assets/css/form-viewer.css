@@ -63,9 +63,9 @@
 /* ========================================== */
 
 .fields-group-container {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
-  width: 100%
+  width: 100% */
 }
 
 .subfield-container {
@@ -108,14 +108,15 @@
 
 
 .fieldset-header {
-  display: flex;
+  /* display: flex;
   justify-content: flex-end;
-  gap: 1rem;
+  gap: 1rem; */
+  height: 3rem;
   background-color: #aaa;
   color: #fff;
   margin: -0.5rem -0.5rem 1rem -0.5rem;
   padding: 4px;
-  border-radius: 1rem 1rem 0 0;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 fieldset {
@@ -172,11 +173,11 @@ fieldset {
 
 
 
-.button-choose-image {
+/* .button-choose-image {
   position: absolute;
   top: 4px;
   left: 4px;
-}
+} */
 
 
 /* ============================================ */

@@ -23,9 +23,12 @@
                     <option value="text">Texte</option>
                     <option value="wysiwyg">Texte riche</option>
                     <option value="number">Nombre</option>
-                    <option value="image">Image</option>
                     <option value="rating">Rating</option>
+                    <option value="image">Image</option>
                     <option value="file">Fichier</option>
+
+
+                    <option value="toggle">Toggle</option>
                     <option value="video">Video</option>
                     <option value="map">Map</option>
                     <option value="fields-group">Fields group</option>
@@ -45,6 +48,22 @@
                     <option value="1">1/12</option>
                 </select>
             </fieldset>
+
+            <template x-if="selectedNode.data.type === 'fields-group'">
+                <div>
+                    <label>Largeur des sous groupe</label>
+                    <select class="select select-bordered w-full max-w-xs" x-model="selectedNode.data.subfieldsWidth">
+                        <option disabled selected>Largeur du champ</option>
+                        <option value="12">12/12</option>
+                        <option value="8">8/12</option>
+                        <option value="6">6/12</option>
+                        <option value="4">4/12</option>
+                        <option value="3">3/12</option>
+                        <option value="2">2/12</option>
+                        <option value="1">1/12</option>
+                    </select>
+                </div>
+            </template>
 
 
 

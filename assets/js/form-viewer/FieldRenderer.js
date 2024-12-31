@@ -33,9 +33,12 @@ class FieldRenderer
       case 'map':
           content += this.renderMap(attributeDescriptor, parentField, index, model);
           break;
-      // case 'fields-group':
-      //     content += this.renderFieldsGroup(attributeDescriptor, parentField, index, model);
-      //     break;
+        case 'toggle':
+            content += this.renderToggle(attributeDescriptor, parentField, index, model);
+            break;
+        case 'file':
+              content += this.renderFile(attributeDescriptor, parentField, index, model);
+              break;
       default:
           content += this.renderText(attributeDescriptor, parentField, index, model);
     }
@@ -60,9 +63,6 @@ class FieldRenderer
     }
 
     let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
-
-    console.log('%cFieldRenderer.js :: 64 =============================', 'color: #f00; font-size: 1rem');
-    console.log(model);
 
     //const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled' : '';
 
@@ -98,26 +98,8 @@ class FieldRenderer
   }
 
   renderRating(attributeDescriptor, parentField, index) {
-    const id = this.generateId(attributeDescriptor, parentField, index);
-    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
-
-
+    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
     let content = ``;
-    content += `
-          <input
-          id="${id}"
-          x-model="${model}"
-          type="text"
-          placeholder="Type here"
-          class="input input-bordered input-primary w-full grow"
-      />
-      `;
-
-      const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
-
-      content += `<div x-html="${model}"></div>`;
-
-
       content += `<div class="rating">`;
         for(let i = 1; i <= 5; i++) {
             let checked =  '';
@@ -164,10 +146,15 @@ class FieldRenderer
     return content;
   }
 
-  renderImage(attributeDescriptor, parentField, index) {
 
+  renderFile(attributeDescriptor, parentField, index) {
+    return this.renderImage(attributeDescriptor, parentField, index);
+  }
+
+  renderImage(attributeDescriptor, parentField, index) {
     const attribute = this.attributes[attributeDescriptor.data.code];
     const id = this.generateId(attributeDescriptor, parentField, index);
+    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
 
     let value = '';
     if(parentField) {
@@ -178,13 +165,33 @@ class FieldRenderer
     }
 
 
-    let content =  `
-        <div id="${id}" class="" style="width:100%">
-    `;
-        content +=  `
-            <div class="attribute-image-container grow">
-        `;
-            if(attribute.values[index]) {
+    let content = `<div id="${id}" class="" style="width:100%">`;
+        content += `<div class="attribute-image-container grow">`;
+
+          content += `<div class="flex gap-2 items-center">`;
+            content += `
+                  <button
+                      class="
+                          btn btn-primary
+                          button-choose-image
+                      "
+                      x-on:click="openMediaLibrary(
+                          '${attributeDescriptor.data.code}',
+                          ${parentField ? "'" + parentField + "'" : 'null'},
+                          '${index}',
+                      )"
+                  >
+                      Choisir un fichier
+                  </button>
+            `;
+            content += `<input
+                disabled
+                class="input input-bordered grow"
+                x-model="${model}"
+              >`;
+          content += `</div>`;
+
+            if(value) {
                 content += `<button
                         x-on:click="resetValue(
                           '${attributeDescriptor.data.code}',
@@ -201,42 +208,44 @@ class FieldRenderer
             }
 
             if(value) {
-                content += `
-                    <img
-                        src="${value}"
-                        class="attribute-value--image"
-                    >
-                `;
+                // check if value is a pdf
+                if(value.includes('.pdf')) {
+                    content += `
+                        <embed
+                            src="${value}"
+                            type="application/pdf"
+                            width="100%"
+                            height="600"
+                        >
+                    `;
+                }
+
+                //check is image
+                else if(
+                    value.includes('.png') ||
+                    value.includes('.jpg') ||
+                    value.includes('.jpeg') ||
+                    value.includes('.gif') ||
+                    value.includes('.svg') ||
+                    value.includes('.webp')
+                  ) {
+                    content += `
+                        <img
+                            src="${value}"
+                            class="attribute-value--image"
+                        >
+                    `;
+                }
             }
         content += `</div>`;
-        content += `
-            <div>
-                <button
-                    class="
-                        btn btn-primary
-                        button-choose-image
-                    "
-                    x-on:click="openMediaLibrary(
-                        '${attributeDescriptor.data.code}',
-                        ${parentField ? "'" + parentField + "'" : 'null'},
-                        '${index}',
-                    )"
-                >
-                    Choisir un fichier
-                </button>
-            </div>
-        `;
     content += `</div>`;
 
     return content;
   }
 
   renderVideo(attributeDescriptor, parentField, index) {
-
-    const attribute = this.attributes[attributeDescriptor.data.code];
     const id = this.generateId(attributeDescriptor, parentField, index);
     const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
-
     const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
 
     let content = `<div class="grow w-full">`;
@@ -283,18 +292,7 @@ class FieldRenderer
   }
 
   renderMap(attributeDescriptor, parentField, index) {
-
-
-    // let value = {
-    //   lat: null,
-    //   lon: null,
-    //   caption: '',
-    // } ;
-
     let value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
-
-
-
     const id = this.generateId(attributeDescriptor, parentField, index);
 
     let content = `
@@ -333,48 +331,33 @@ class FieldRenderer
     return content;
   }
 
-  renderFieldsGroup(attributeDescriptor, parentField, index, model) {
-    let content = `
-        <div class="fields-group-container">
+  renderToggle(attributeDescriptor, parentField, index) {
+    const id = this.generateId(attributeDescriptor, parentField, index);
+    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+
+    let content = ``
+    content += `
+      <div class="flex flex-col">
+        <div class="form-control w-52">
+          <label class="label cursor-pointer">
+            <input
+              type="checkbox"
+              class="toggle toggle-primary"
+              :x-model="${model}"
+              :checked="${model}"
+              @change="setValue(
+                '${attributeDescriptor.data.code}',
+                ${parentField ? "'" + parentField + "'" : 'null'},
+                '${index}',
+                $event.target.checked
+              )"
+            />
+          </label>
+        </div>
     `;
 
-        for(let childIndex in attributeDescriptor.children) {
-            const childAttribute = attributeDescriptor.children[childIndex];
-            const model = `attributes['${attributeDescriptor.data.code}'].values[${index}]['${childAttribute.data.code}']`;
-
-            content += `
-                <div
-                  class="
-                    subfield-container
-                    subfield-container--${childAttribute.data.type}
-                    subfield-container--${childAttribute.data.code}
-                ">
-            `;
-                content += `<h4 class="subfield-name">${childAttribute.text}</h4>`;
-
-                // content += this.renderAttribute(
-                //     childAttribute,
-                //     childIndex,
-                //     // model,
-                //     // attributeDescriptor.data.code,
-                // );
-
-                content += this.store.renderFieldset(
-                    childAttribute,
-                    index,
-                    model,
-                    attributeDescriptor.data.code,
-                );
-
-            content += `
-                </div>
-            `;
-        }
-
-
-    content += '</div>';
-
     return content;
+
   }
 
 }
