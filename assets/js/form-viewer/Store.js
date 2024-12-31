@@ -1,6 +1,9 @@
 const store = {
     mediaFrame: null,
     descriptor: {},
+
+
+    descriptors: {},
     attributes: {},
     attributesErrors: {},
 
@@ -35,6 +38,10 @@ const store = {
 
     extractAttributes(descriptor) {
         if (descriptor.data.code) {
+
+            this.descriptors[descriptor.data.code] = descriptor;
+
+
             if (descriptor.data.type === 'fields-group') {
                 if (!this.attributes[descriptor.data.code]) {
                     this.attributes[descriptor.data.code] = {
@@ -133,13 +140,14 @@ const store = {
 
     // ===================================================
 
-    resetValue(attributeCode, index, subfield = null) {
-        if (!subfield) {
-            this.attributes[attributeCode].values[index] = '';
+    resetValue(attributeCode, parentAttributeCode, index) {
+        if (parentAttributeCode) {
+            this.attributes[parentAttributeCode].values[index][attributeCode] = null;
         }
         else {
-            this.attributes[attributeCode].values[index][subfield] = '';
+            this.attributes[attributeCode].values[index] = null;
         }
+
     },
 
     deleteValue(attributeCode, index) {
@@ -148,12 +156,33 @@ const store = {
 
     setValue(attributeCode, parentField, index, value,) {
         if (parentField) {
+
+            if(!this.attributes[parentField]) {
+                console.error('No values for attribute ' + parentField);
+            }
+
+            if(!this.attributes[parentField].values) {
+                console.error('No values for attribute ' + parentField + '[' + index + ']');
+            }
             this.attributes[parentField].values[index][attributeCode] = value;
             return this.attributes[parentField].values[index][attributeCode];
         }
         this.attributes[attributeCode].values[index] = value;
 
         return this.attributes[attributeCode].values[index];
+    },
+
+    getModel(attributeCode, parentField, index) {
+
+        console.log('%cStore.js :: 161 =============================', 'color: #f00; font-size: 1rem');
+        console.log(attributeCode);
+        console.log(parentField);
+        console.log(index);
+
+        if (parentField) {
+            return `attributes['${parentField}'].values[${index}]['${attributeCode}']`;
+        }
+        return `attributes['${attributeCode}'].values[${index}]`;
     },
 
     getValue(attributeCode, parentField, index) {
@@ -419,9 +448,29 @@ const store = {
         return content;
     },
 
+    getAttributeContainerCssClass(attribute) {
+        let cssClass = ''
+        if (attribute.data.type === 'fields-group') {
+            cssClass = 'col-span-12';
+        }
+        else if (attribute.data.width) {
+            cssClass = 'col-span-' + attribute.data.width;
+        }
+        else {
+            cssClass = 'col-span-12';
+        }
+
+        return cssClass;
+    },
+
     // ===================================================
 
     renderAttribute(attribute, index, model, parentAttributeCode = null) {
+
+
+        console.log('%cStore.js :: 427 RENDER :' + attribute.data.code,  'color: #f00; font-size: 2rem');
+
+
         let content = '';
 
         content += `
@@ -439,7 +488,7 @@ const store = {
                       attribute-values-container
                       grid grid-cols-12
                   "
-              ">`;
+              >`;
 
 
         for (let i = 0; i < this.attributes[attribute.data.code].values.length; i++) {
@@ -494,7 +543,13 @@ const store = {
 
     repeatField(attributeCode) {
 
-        const attributeDescriptor = this.attributes[attributeCode].descriptor;
+        const attributeDescriptor = this.descriptors[attributeCode];
+
+        if(!attributeDescriptor) {
+            console.error('No descriptor for ' + attributeCode);
+            console.log(this.descriptors);
+            return;
+        }
 
         if (attributeDescriptor.data.type === 'fields-group') {
             const value = {};
@@ -510,7 +565,7 @@ const store = {
 
     // ===================================================
 
-    renderFieldset(attribute, index, model = null, parentField = null) {
+    renderFieldset(attribute, parentField, index) {
         let content = '';
 
         content += `
@@ -527,7 +582,7 @@ const store = {
 
         content += '<fieldset>';
         content += '<div class="flex gap-4 items-center">';
-            content += this.renderer.renderField(attribute, parentField, index, model)
+            content += this.renderer.renderField(attribute, parentField, index)
         content += '</div>';
 
         // content += `

@@ -93,6 +93,7 @@
             position: relative;
             margin-bottom: 1rem;
             padding: 1rem;
+            /* flex-grow: 1; */
         }
 
         .subfield-container--image {
@@ -282,8 +283,134 @@
                                         </template>
                                     </ul>
                                     <template x-for="(cluster, clusterIndex) in store.descriptor.children">
-                                        <div :id="'tabs-' + clusterIndex" class="grow">
-                                            <div x-html="renderCluster(cluster, clusterIndex)"></div>
+                                        <div :id="'tabs-' + clusterIndex" class="grow" x-data="cluster">
+
+                                            <div class="cluster-container grid grid-cols-12">
+
+                                                <template x-for="(attributeDescriptor, attributeIndex) in cluster.children">
+                                                    <div class="attribute-container" :class="getAttributeContainerCssClass(attributeDescriptor)">
+
+                                                        <div>
+                                                            <h3 class="attribute-name" x-html="attributeDescriptor.text"></h3>
+
+                                                            <div
+                                                                class="
+                                                                    attribute-values-container
+                                                                    grid grid-cols-12
+                                                                "
+                                                            >
+
+                                                                    <template x-if="attributeDescriptor.data.type !=='fields-group'">
+                                                                        <template x-for="(value, valueIndex) in attributes[attributeDescriptor.data.code].values">
+                                                                            <div
+                                                                                class="
+                                                                                    value-container
+                                                                                "
+                                                                                :class="
+                                                                                    'value-container--' + attributeDescriptor.data.code +
+                                                                                    ' value-container--' +attributeDescriptor.data.code +
+                                                                                    (attributeDescriptor.data.type === 'fields-group'
+                                                                                        ? ' col-span-' + attributeDescriptor.data.width
+                                                                                        : ' col-span-12'
+                                                                                    )
+                                                                                "
+                                                                            >
+                                                                                <div>
+                                                                                    <fieldset>
+                                                                                        <div class="flex gap-4 items-center">
+                                                                                            <div class="w-full" x-html="renderFieldset(attributeDescriptor, null, valueIndex)"></div>
+                                                                                        </div>
+                                                                                    </fieldset>
+                                                                                </div>
+                                                                            </div>
+                                                                        </template>
+                                                                    </template>
+
+                                                                    <template x-if="attributeDescriptor.data.type ==='fields-group'">
+                                                                        <template x-for="(subValue, subValueIndex) in attributes[attributeDescriptor.data.code].values">
+                                                                            <div
+                                                                                class="
+                                                                                    value-container
+                                                                                "
+                                                                                :class="
+                                                                                    'value-container--' + attributeDescriptor.data.code +
+                                                                                    ' value-container--' +attributeDescriptor.data.code +
+                                                                                    (attributeDescriptor.data.type === 'fields-group'
+                                                                                        ? ' col-span-' + attributeDescriptor.data.width
+                                                                                        : ' col-span-12'
+                                                                                    )
+                                                                                "
+                                                                            >
+
+                                                                                <div x-show="subValueIndex > 0"class="fieldset-header">
+                                                                                    <button
+                                                                                        x-on:click="deleteValue(
+                                                                                            attributeDescriptor.data.code,
+                                                                                            subValueIndex,
+                                                                                        )"
+                                                                                        class="btn ri-delete-bin-fill"
+                                                                                    ></button>
+                                                                                </div>
+
+
+                                                                                <div class="fields-group-container">
+                                                                                    <template x-for="(subfieldDescriptor, subfieldIndex) in attributeDescriptor.children">
+                                                                                        <fieldset>
+                                                                                            <div class="flex gap-4 items-center">
+                                                                                                <div
+                                                                                                    class="subfield-container w-full"
+                                                                                                    :class="
+                                                                                                        'subfield-container--' + subfieldDescriptor.data.type +
+                                                                                                        ' subfield-container--' + subfieldDescriptor.data.code
+                                                                                                    "
+                                                                                                >
+                                                                                                    <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
+
+                                                                                                        <div>
+                                                                                                            <div x-html="renderFieldset(
+                                                                                                                subfieldDescriptor,
+                                                                                                                attributeDescriptor.data.code,
+                                                                                                                subValueIndex
+                                                                                                            )"></div>
+                                                                                                        </div>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </fieldset>
+                                                                                    </template>
+                                                                                </div>
+                                                                            </div>
+                                                                        </template>
+                                                                    </template>
+
+
+                                                                <div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <template x-if="attributeDescriptor.data.repeat">
+                                                        <div class="mt-4">
+                                                            <button
+                                                                x-on:click="repeatField(attributeDescriptor.data.code)"
+                                                                class="btn repeat"
+                                                            >
+                                                                <i class="ri-add-circle-line"></i>
+                                                            </button>
+                                                        </div>
+                                                    </template>
+
+
+
+
+
+
+
+
+
+
+                                                </template>
+                                            </div>
                                         </div>
                                     </template>
                                 </div>
@@ -294,11 +421,5 @@
 
             </div>
     </section>
-
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-        });
-    </script>
 @endsection
+

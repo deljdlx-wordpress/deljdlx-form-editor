@@ -33,9 +33,9 @@ class FieldRenderer
       case 'map':
           content += this.renderMap(attributeDescriptor, parentField, index, model);
           break;
-      case 'fields-group':
-          content += this.renderFieldsGroup(attributeDescriptor, parentField, index, model);
-          break;
+      // case 'fields-group':
+      //     content += this.renderFieldsGroup(attributeDescriptor, parentField, index, model);
+      //     break;
       default:
           content += this.renderText(attributeDescriptor, parentField, index, model);
     }
@@ -50,10 +50,22 @@ class FieldRenderer
 
 
 
-  renderText(attributeDescriptor, parentField, index, model) {
+  renderText(attributeDescriptor, parentField, index) {
 
     const id = this.generateId(attributeDescriptor, parentField, index);
-    const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled' : '';
+
+    let disabled = '';
+    if(attributeDescriptor.data.readonly) {
+        disabled = 'disabled="disabled"';
+    }
+
+    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+
+    console.log('%cFieldRenderer.js :: 64 =============================', 'color: #f00; font-size: 1rem');
+    console.log(model);
+
+    //const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled' : '';
+
 
     return `
         <input
@@ -67,9 +79,11 @@ class FieldRenderer
     `;
   }
 
-  renderNumber(attributeDescriptor, parentField, index, model) {
+  renderNumber(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
     const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled="true"' : '';
+    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+
 
     return `
         <input
@@ -83,14 +97,16 @@ class FieldRenderer
     `;
   }
 
-  renderRating(attributeDescriptor, parentField, index, model) {
+  renderRating(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
-    let content = ``;
+    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
 
+
+    let content = ``;
     content += `
           <input
           id="${id}"
-          x-model="test"
+          x-model="${model}"
           type="text"
           placeholder="Type here"
           class="input input-bordered input-primary w-full grow"
@@ -99,40 +115,34 @@ class FieldRenderer
 
       const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
 
-      content += `<div x-html="test"></div>`;
+      content += `<div x-html="${model}"></div>`;
 
-      console.log('%cFieldRenderer.js :: 104 =============================', 'color: #f00; font-size: 1rem');
-      console.log(this.store.test);
 
-    content += `<div class="rating">`;
-      for(let i = 1; i <= 5; i++) {
-          let checked =  '';
+      content += `<div class="rating">`;
+        for(let i = 1; i <= 5; i++) {
+            let checked =  '';
 
-          console.log('%cFieldRenderer.js :: 111 =============================', 'color: #f00; font-size: 1rem');
-          console.log(i, this.store.test);
-
-          if(i == this.store.test) {
-            console.log('%cFieldRenderer.js :: 115 =============================', 'color: #f00; font-size: 1rem');
-            console.log("ICI");
-          // if(i === this.store.getValue(attributeDescriptor.data.code, parentField, index)) {
-              checked = 'checked="checked"';
-          }
-          content += `<input
-            ${checked}
-            type="radio"
-            name="${attributeDescriptor.data.code + '_' + parentField + '_' + index}"
-            class="mask mask-star-2"
-            @click="setRating('${attributeDescriptor.data.code}', '${parentField}', '${index}', ${i})"
-          />`;
-      }
-      content += `</div>`;
+            if(i == value) {
+                checked = 'checked="checked"';
+            }
+            content += `<input
+              ${checked}
+              type="radio"
+              name="${attributeDescriptor.data.code + '_' + parentField + '_' + index}"
+              class="mask mask-star-2"
+              @click="setRating('${attributeDescriptor.data.code}', '${parentField}', '${index}', ${i})"
+            />`;
+        }
+        content += `</div>`;
 
     return content;
   }
 
 
-  renderWysiwyg(attributeDescriptor, parentField, index, model) {
+  renderWysiwyg(attributeDescriptor, parentField, index) {
     const id = this.generateId(attributeDescriptor, parentField, index);
+    let model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+
     let content = ``;
     content += `
         <textarea
@@ -154,7 +164,7 @@ class FieldRenderer
     return content;
   }
 
-  renderImage(attributeDescriptor, parentField, index, model) {
+  renderImage(attributeDescriptor, parentField, index) {
 
     const attribute = this.attributes[attributeDescriptor.data.code];
     const id = this.generateId(attributeDescriptor, parentField, index);
@@ -178,7 +188,7 @@ class FieldRenderer
                 content += `<button
                         x-on:click="resetValue(
                           '${attributeDescriptor.data.code}',
-                          '${parentField}',
+                          ${parentField ? "'" + parentField + "'" : 'null'},
                           '${index}'
                         )"
                         class="
@@ -208,7 +218,7 @@ class FieldRenderer
                     "
                     x-on:click="openMediaLibrary(
                         '${attributeDescriptor.data.code}',
-                        '${parentField}',
+                        ${parentField ? "'" + parentField + "'" : 'null'},
                         '${index}',
                     )"
                 >
@@ -221,34 +231,23 @@ class FieldRenderer
     return content;
   }
 
-  renderVideo(attributeDescriptor, parentField, index, model) {
+  renderVideo(attributeDescriptor, parentField, index) {
 
     const attribute = this.attributes[attributeDescriptor.data.code];
     const id = this.generateId(attributeDescriptor, parentField, index);
+    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
 
-    let url = '';
-    let resetAttributeCode = null;
-    let resetSubfield = null;
-
-    if(parentField) {
-        url = this.attributes[parentField].values[index][attributeDescriptor.data.code];
-        resetAttributeCode = parentField;
-        resetSubfield = attributeDescriptor.data.code;
-    }
-    else {
-        url = attribute.values[index];
-    }
-
+    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
 
     let content = `<div class="grow w-full">`;
         content +=  `<div class="flex">`
-            if(url) {
+            if(value) {
                 content += `
                     <button
                         x-on:click="resetValue(
-                            '${resetAttributeCode}',
+                            '${attributeDescriptor.data.code}',
+                            ${parentField ? "'" + parentField + "'" : 'null'},
                             '${index}',
-                            '${resetSubfield}',
                         )"
                         class="
                             ri-eraser-line
@@ -271,10 +270,10 @@ class FieldRenderer
 
 
 
-        if(url) {
+        if(value) {
             content += `
                 <div class="w-full"
-                    x-html="renderYoutubeVideo('${url}')">
+                    x-html="renderYoutubeVideo('${value}')">
                 </div>
             `;
         }
@@ -283,28 +282,18 @@ class FieldRenderer
     return content;
   }
 
-  renderMap(attributeDescriptor, parentField, index, model) {
+  renderMap(attributeDescriptor, parentField, index) {
 
 
-    let value = {
-      lat: null,
-      lon: null,
-      caption: '',
-    } ;
+    // let value = {
+    //   lat: null,
+    //   lon: null,
+    //   caption: '',
+    // } ;
 
-    if(parentField) {
-      // attribute = this.attributes[parentField];
-      if(!this.attributes[parentField].values[index][attributeDescriptor.data.code]) {
-        this.attributes[parentField].values[index][attributeDescriptor.data.code] = value;
-      }
-      value = this.attributes[parentField].values[index][attributeDescriptor.data.code];
-    }
-    else {
-      if(!this.attributes[attributeDescriptor.data.code].values[index]) {
-        this.attributes[attributeDescriptor.data.code].values[index] = value;
-      }
-      value = this.attributes[attributeDescriptor.data.code].values[index];
-    }
+    let value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+
+
 
     const id = this.generateId(attributeDescriptor, parentField, index);
 
