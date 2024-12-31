@@ -20,6 +20,7 @@ class FormViewer extends BaseController
         'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css',
         'https://releases.jquery.com/git/ui/jquery-ui-git.css',
         'plugin://deljdlx-form-editor/assets/css/form-viewer.css',
+        'plugin://deljdlx-form-editor/assets/css-compiled/form-viewer.css',
     ];
 
     public static $prependJs = [

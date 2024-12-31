@@ -13,32 +13,35 @@ class FieldRenderer
 
     switch(attributeDescriptor.data.type) {
       case 'text':
-          content += this.renderText(attributeDescriptor, parentField, index, model);
-          break;
+        content += this.renderText(attributeDescriptor, parentField, index, model);
+        break;
       case 'number':
-          content += this.renderNumber(attributeDescriptor, parentField, index, model);
-          break;
+        content += this.renderNumber(attributeDescriptor, parentField, index, model);
+        break;
       case 'rating':
-          content += this.renderRating(attributeDescriptor, parentField, index, model);
-            break;
+        content += this.renderRating(attributeDescriptor, parentField, index, model);
+          break;
       case 'wysiwyg':
-          content += this.renderWysiwyg(attributeDescriptor, parentField, index, model);
-          break;
+        content += this.renderWysiwyg(attributeDescriptor, parentField, index, model);
+        break;
       case 'image':
-          content += this.renderImage(attributeDescriptor, parentField, index, model);
-          break;
+        content += this.renderImage(attributeDescriptor, parentField, index, model);
+        break;
       case 'video':
-          content += this.renderVideo(attributeDescriptor, parentField, index, model);
-          break;
+        content += this.renderVideo(attributeDescriptor, parentField, index, model);
+        break;
       case 'map':
-          content += this.renderMap(attributeDescriptor, parentField, index, model);
-          break;
-        case 'toggle':
-            content += this.renderToggle(attributeDescriptor, parentField, index, model);
-            break;
-        case 'file':
-              content += this.renderFile(attributeDescriptor, parentField, index, model);
-              break;
+        content += this.renderMap(attributeDescriptor, parentField, index, model);
+        break;
+      case 'toggle':
+        content += this.renderToggle(attributeDescriptor, parentField, index, model);
+        break;
+      case 'file':
+        content += this.renderFile(attributeDescriptor, parentField, index, model);
+        break;
+      case 'select':
+        content += this.renderSelect(attributeDescriptor, parentField, index, model);
+        break;
       default:
           content += this.renderText(attributeDescriptor, parentField, index, model);
     }
@@ -357,7 +360,59 @@ class FieldRenderer
     `;
 
     return content;
+  }
 
+  renderSelect(attributeDescriptor, parentField, index) {
+    const model = this.store.getModel(attributeDescriptor.data.code, parentField, index);
+    const value = this.store.getValue(attributeDescriptor.data.code, parentField, index);
+
+    let content = ``;
+
+    console.log('%cFieldRenderer.js :: 371 =============================', 'color: #f00; font-size: 1rem');
+    console.log(value);
+
+
+    content += `
+      <div class="flex flex-col">
+        <select
+          class="select select-bordered w-full max-w-xs"
+          @change="
+            console.log($event.target.value);
+            setValue(
+              '${attributeDescriptor.data.code}',
+              ${parentField ? "'" + parentField + "'" : 'null'},
+              '${index}',
+              $event.target.value
+            )
+          "
+        >`;
+
+        content += `
+          <option value="" disabled selected>-- Select --</option>
+        `;
+
+        for(let option of attributeDescriptor.data.options) {
+          let selected = '';
+          if(value == option.value) {
+              selected = 'selected';
+          }
+          content += `
+            <option
+              value="${option.value}"
+              ${selected}
+            >
+              ${option.caption}
+            </option>
+          `;
+        }
+
+      content += `
+          </template>
+        </select>
+      </div>
+    `;
+
+    return content;
   }
 
 }

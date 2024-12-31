@@ -28,7 +28,10 @@
                     <option value="file">Fichier</option>
 
 
+                    <option value="select">Select</option>
                     <option value="toggle">Toggle</option>
+
+
                     <option value="video">Video</option>
                     <option value="map">Map</option>
                     <option value="fields-group">Fields group</option>
@@ -48,6 +51,38 @@
                     <option value="1">1/12</option>
                 </select>
             </fieldset>
+
+
+            <template x-if="selectedNode.data.type === 'select'">
+                <div x-init="if(!selectedNode.data.options) {
+                    selectedNode.data.options = [];
+                }">
+                    <label>Options</label>
+                    <ul>
+                        <template x-for="(option, optionIndex) in selectedNode.data.options">
+                            <li class="flex items-center">
+                                <label class="input input-bordered flex items-center gap-2">
+                                    Label :
+                                    <input x-model="option.caption" type="text" class="grow" placeholder="" />
+                                </label>
+
+                                <label class="input input-bordered flex items-center gap-2">
+                                    Valeur :
+                                    <input x-model="option.value" type="text" class="grow" placeholder="" />
+                                </label>
+                                <button x-on:click="
+                                    selectedNode.data.options.splice(optionIndex, 1)
+                                " class="btn ri-delete-bin-fill"></button>
+                            </li>
+
+                        </template>
+                    </ul>
+
+                    <span x-on:click="selectedNode.data.options.push({caption: '', value: ''})" class="btn ri-add-circle-line"></span>
+
+                </div>
+            </template>
+
 
             <template x-if="selectedNode.data.type === 'fields-group'">
                 <div>

@@ -14,5 +14,6 @@ class FormTreeEditor extends TreeEditor
     public static $prependCss = [
         'https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css',
         'plugin://deljdlx-tree-editor/assets/vendor/jstree/jstree.min.css',
+        'plugin://deljdlx-form-editor/assets/css-compiled/form-editor.css',
     ];
 }

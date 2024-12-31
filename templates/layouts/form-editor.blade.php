@@ -5,17 +5,8 @@
 
 @section('body-content')
 
-{{-- 2 column div with tailwind --}}
-<div x-data="application" class="skill-tree-editor no-pcl-style">
 
-
-    {{-- <div id="my-wysiwyg-editor"></div>
-    <button id="save-button" class="btn btn-primary">Save Content</button>
-
-    <button id="open-media-library" class="btn btn-primary">Choisir un fichier</button>
-    <input type="text" id="media-url" readonly />
-
- --}}
+<div x-data="application" class="form-editor skill-tree-editor no-pcl-style">
 
     <div>
 

@@ -38,10 +38,10 @@
 
 
 
-    <section>
+    <section class="form-viewer">
         <div class="flex justify-center">
 
-            <div class="create-entity-container container edit-entity-container pt-10" x-data="application" x-init="initializeMediaLibrary()">
+            <div class="container edit-entity-container pt-10" x-data="application" x-init="initializeMediaLibrary()">
                 <div class="flex">
                     <button class="btn btn-primary debug" x-on:click="console.log(store)">Debug</button>
                     <button class="btn btn-primary save" x-on:click="save()">Save</button>
