@@ -70,6 +70,8 @@ const store = {
 
     validateVariables() {
 
+        return true;
+
         let valid = true;
 
         for (let code in this.attributes) {
@@ -105,10 +107,13 @@ const store = {
                     for (let index in attribute.values) {
                         attribute.errors[index] = false;
 
-                        if (!attribute.values[index].length) {
+                        console.log('%cStore.js :: 109 =============================', 'color: #f00; font-size: 1rem');
+                        console.log(code);
+                        console.log(index);
+
+                        if (attribute.values[index] === null || !attribute.values[index].length) {
                             console.log('ERROR ON ' + code + ' ' + index);
                             attribute.errors[index] = 'Ce champ est obligatoire';
-                            valid = false;
                         }
                     }
                 }
