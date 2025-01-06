@@ -393,7 +393,7 @@ class FieldRenderer
       // "
 
         content += `
-          <option value="" disabled selected>-- Select --</option>
+          <option value="" selected>-- Select --</option>
         `;
 
         for(let option of attributeDescriptor.data.options) {
