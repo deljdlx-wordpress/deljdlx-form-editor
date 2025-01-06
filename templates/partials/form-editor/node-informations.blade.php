@@ -17,6 +17,13 @@
             </fieldset>
 
             <fieldset>
+                <label class="input input-bordered flex items-center gap-2">
+                    ACF mapping :
+                    <input x-on:input="updateSelectedNode" x-model="selectedNode.data.acfMapping" name="acf_mapping" type="text" class="grow" placeholder="" />
+                </label>
+            </fieldset>
+
+            <fieldset>
                 <label>Type de champs</label>
                 <select class="select select-bordered w-full max-w-xs" x-model="selectedNode.data.type">
                     <option disabled selected>Type de champs</option>
