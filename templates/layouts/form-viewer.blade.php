@@ -32,6 +32,10 @@
             }
         ).addClass( "ui-tabs-vertical ui-helper-clearfix" );
         jQuery( "#tabs li" ).removeClass( "ui-corner-top" ).addClass( "ui-corner-left" );
+
+
+
+        // jQuery( "#icon-selector" ).tabs();
     });
 
     </script>
@@ -42,11 +46,15 @@
         <div class="flex justify-center">
 
             <div class="container edit-entity-container pt-10" x-data="application" x-init="initializeMediaLibrary()">
-                <div class="flex">
+                <div class="flex flex-wrap">
                     <button class="btn btn-primary debug" x-on:click="console.log(store)">Debug</button>
                     <button class="btn btn-primary save" x-on:click="save()">Save</button>
                 </div>
                 <input style="border: solid 1px #f0f" id="entity_id" type="hiddene" name="entity_id" value="{{ $entity->ID }}">
+
+
+                @include('partials.form-viewer.icon-selector')
+
 
 
                 <template x-if="store.descriptor">
@@ -71,28 +79,18 @@
                                                             <span  x-html="attributeDescriptor.text"></span>
                                                         </h3>
 
+                                                        <template x-if="attributeDescriptor.data.description">
+                                                            <div class="attribute-description" x-html="attributeDescriptor.data.description"></div>
+                                                        </template>
+
 
                                                         <div class=" attribute-values-container grid grid-cols-12">
-                                                            {{-- <div
-                                                                class="
-                                                                    value-container
-                                                                "
-                                                                :class="
-                                                                    'value-container--' + attributeDescriptor.data.code +
-                                                                    ' value-container--' +attributeDescriptor.data.code +
-                                                                    (attributeDescriptor.data.type === 'fields-group'
-                                                                        ? ' col-span-' + attributeDescriptor.data.width
-                                                                        : ' col-span-12'
-                                                                    )
-                                                                "
-                                                            > --}}
-                                                                <template x-if="attributeDescriptor.data.type !=='fields-group'">
-                                                                    @include('partials.form-viewer.attribute-field')
-                                                                </template>
-                                                                <template x-if="attributeDescriptor.data.type ==='fields-group'">
-                                                                    @include('partials.form-viewer.fields-group')
-                                                                </template>
-                                                            {{-- </div> --}}
+                                                            <template x-if="attributeDescriptor.data.type !=='fields-group'">
+                                                                @include('partials.form-viewer.attribute-field')
+                                                            </template>
+                                                            <template x-if="attributeDescriptor.data.type ==='fields-group'">
+                                                                @include('partials.form-viewer.fields-group')
+                                                            </template>
                                                         </div>
 
                                                         {{-- Repeat field part --}}

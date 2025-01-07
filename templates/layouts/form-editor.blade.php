@@ -39,7 +39,7 @@
                             </div>
                         </div>
 
-                        <div class="col-span-8 p-2" style="border: solid 2px #f0f; min-height: 300px">
+                        <div class="col-span-8 p-2 skill-tree__panel skill-tree__panel--right">
                             <template x-if="selectedNode">
                                 @include($nodeInformationsTemplate)
                             </template>

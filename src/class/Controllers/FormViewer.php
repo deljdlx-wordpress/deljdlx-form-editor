@@ -24,10 +24,12 @@ class FormViewer extends BaseController
     ];
 
     public static $prependJs = [
+        'plugin://deljdlx-form-editor/assets/js/form-viewer/remix-icon.js',
         'plugin://deljdlx-form-editor/assets/js/form-viewer/FieldRenderer.js',
         'plugin://deljdlx-form-editor/assets/js/form-viewer/Store.js',
         'https://code.jquery.com/ui/1.14.1/jquery-ui.js',
         'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js',
+
     ];
 
 

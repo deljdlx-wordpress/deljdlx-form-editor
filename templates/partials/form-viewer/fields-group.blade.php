@@ -44,6 +44,11 @@
                             <div class="flex items-center">
                                 <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
                             </div>
+
+                            <template x-if="subfieldDescriptor.data.description">
+                                <div class="subfield-description" x-html="subfieldDescriptor.data.description"></div>
+                            </template>
+
                             <div x-html="renderFieldset(
                                 subfieldDescriptor,
                                 attributeDescriptor,

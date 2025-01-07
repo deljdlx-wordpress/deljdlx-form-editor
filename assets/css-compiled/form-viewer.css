@@ -1,6 +1,7 @@
 .form-viewer {
   /* .ui-tabs-vertical { width: 55em; } */
   /* ============================================ */
+  /* ============================================ */
 }
 .form-viewer .ui-widget-header {
   border: none;
@@ -36,6 +37,24 @@
 .form-viewer .ui-tabs-vertical .ui-tabs-panel {
   padding: 0;
 }
+.form-viewer #icon-selector {
+  position: absolute;
+  z-index: 1000;
+  border: solid 1px #ccc;
+  border-radius: 4px;
+  padding: 0.5rem;
+  background-color: #fff;
+  width: 300px;
+  min-height: 300px;
+  box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+}
+.form-viewer #icon-selector select {
+  border: solid 1px #ccc;
+  background-color: #fff;
+}
+.form-viewer #icon-selector .icon:hover {
+  background-color: #ffa;
+}
 .form-viewer .cluster-container {
   margin: 0;
   border: solid 2px #667788;
@@ -59,6 +78,9 @@
 }
 .form-viewer .cluster-container .attribute-container fieldset {
   position: relative;
+}
+.form-viewer .cluster-container .attribute-container fieldset .selectedIcon {
+  font-size: 3rem;
 }
 .form-viewer .cluster-container .attribute-container .value-container {
   position: relative;

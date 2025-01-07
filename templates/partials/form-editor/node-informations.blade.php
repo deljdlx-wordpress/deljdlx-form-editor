@@ -15,12 +15,12 @@
                 </label>
             </fieldset>
 
-            <fieldset>
+            {{-- <fieldset>
                 <label class="flex items-center gap-2">
                     <span class="label-text">ACF mapping :</span>
                     <input x-on:input="updateSelectedNode" x-model="selectedNode.data.acfMapping" name="acf_mapping" type="text" class="grow outline-none" placeholder="" />
                 </label>
-            </fieldset>
+            </fieldset> --}}
 
             <fieldset>
                 <label>
@@ -31,7 +31,10 @@
                         <option value="wysiwyg">Texte riche</option>
                         <option value="number">Nombre</option>
                         <option value="rating">Rating</option>
+
                         <option value="image">Image</option>
+                        <option value="icon">Icone</option>
+
                         <option value="file">Fichier</option>
 
 
@@ -41,23 +44,12 @@
 
                         <option value="video">Video</option>
                         <option value="map">Map</option>
-                        <option value="fields-group">Fields group</option>
-                    </select>
-                </label>
-            </fieldset>
 
-            <fieldset>
-                <label class="flex items-center gap-2">
-                    <span class="label-text">Largeur</span>
-                    <select class="w-full max-w-xs outline-none" x-model="selectedNode.data.width">
-                        <option disabled selected>Largeur du champ</option>
-                        <option value="12">12/12</option>
-                        <option value="8">8/12</option>
-                        <option value="6">6/12</option>
-                        <option value="4">4/12</option>
-                        <option value="3">3/12</option>
-                        <option value="2">2/12</option>
-                        <option value="1">1/12</option>
+                        {{-- TODO - require a wysiwyg initialization refactorization --}}
+                        {{-- <option value="static">Contenu statique</option> --}}
+
+
+                        <option value="fields-group">Fields group</option>
                     </select>
                 </label>
             </fieldset>
@@ -71,13 +63,13 @@
                     <ul>
                         <template x-for="(option, optionIndex) in selectedNode.data.options">
                             <li class="flex items-center">
-                                <label class="input input-bordered flex items-center gap-2">
-                                    Label :
+                                <label class="flex items-center gap-2">
+                                    <span class="label-text">Label :</span>
                                     <input x-model="option.caption" type="text" class="grow outline-none" placeholder="" />
                                 </label>
 
-                                <label class="input input-bordered flex items-center gap-2">
-                                    Valeur :
+                                <label class="flex items-center gap-2">
+                                    <span class="label-text">Valeur :</span>
                                     <input x-model="option.value" type="text" class="grow outline-none" placeholder="" />
                                 </label>
                                 <button x-on:click="
@@ -94,23 +86,49 @@
             </template>
 
 
+            <fieldset>
+                <label class="flex items-center gap-2">
+                    <span class="label-text">Largeur</span>
+                    <select class="w-full max-w-xs outline-none" x-model="selectedNode.data.width">
+                        <option selected>Largeur du champ</option>
+                        <template x-for="(colspan) in [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]">
+                            <option :value="colspan" x-text="colspan + '/12'"></option>
+                        </template>
+                    </select>
+                </label>
+            </fieldset>
+
+
             <template x-if="selectedNode.data.type === 'fields-group'">
                 <fieldset>
                     <label class="flex items-center gap-2">
                         <span class="label-text">Largeur des sous groupe</span>
                         <select class="w-full max-w-xs outline-none" x-model="selectedNode.data.subfieldsWidth">
-                            <option disabled selected>Largeur du champ</option>
-                            <option value="12">12/12</option>
-                            <option value="8">8/12</option>
-                            <option value="6">6/12</option>
-                            <option value="4">4/12</option>
-                            <option value="3">3/12</option>
-                            <option value="2">2/12</option>
-                            <option value="1">1/12</option>
+                            <option selected>Largeur du champ</option>
+                            <template x-for="(colspan) in [12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]">
+                                <option :value="colspan" x-text="colspan + '/12'"></option>
+                            </template>
                         </select>
                     </label>
                 </fieldset>
             </template>
+
+
+
+            {{-- TODO - require a wysiwyg initialization refactorization --}}
+            {{-- <fieldset x-show="selectedNode.data.type === 'static'">
+                <label class="flex items-center gap-2">
+                    <span class="label-text">Contenu :</span>
+                </label>
+                <div class="wysiwyg-wrapper">
+                    <textarea
+                        id="static-editor"
+                        x-on:input="updateSelectedNode"
+                        x-model="selectedNode.data.staticContent"
+                        class="wysiwyg">
+                    </textarea>
+                <div>
+            </fieldset> --}}
 
 
 
@@ -147,14 +165,19 @@
                     <span class="label-text">Description :</span>
                 </label>
                 <div class="wysiwyg-wrapper">
-                    <textarea x-on:input="updateSelectedNode" x-model="selectedNode.data.description" name="description" class="wysiwyg textarea textarea-bordered w-full grow outline-none"></textarea>
+                    <textarea
+                        id="description-editor"
+                        x-on:input="updateSelectedNode"
+                        x-model="selectedNode.data.description"
+                        class="wysiwyg"
+                    ></textarea>
                 <div>
             </fieldset>
 
 
             <fieldset>
                 <label>
-                    Template (Use ${CONTENT} to insert the value of the field in the template): 
+                    Template (Use ${CONTENT} to insert the value of the field in the template):
                 </label>
                 <div>
                     {{-- <textarea x-on:input="updateSelectedNode" x-model="selectedNode.data.value" name="value" class="textarea textarea-bordered w-full grow"></textarea> --}}

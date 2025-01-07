@@ -42,6 +42,12 @@ class FieldRenderer
       case 'select':
         content += this.renderSelect(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
+      case 'icon':
+          content += this.renderIcon(attributeDescriptor, parentFieldDescriptor, index, model);
+          break;
+        // case 'static':
+        //   content += this.renderSelect(attributeDescriptor, parentFieldDescriptor, index, model);
+        //   break;
       default:
           content += this.renderText(attributeDescriptor, parentFieldDescriptor, index, model);
     }
@@ -54,6 +60,46 @@ class FieldRenderer
     return id;
   }
 
+
+  renderIcon(attributeDescriptor, parentField, index) {
+
+    const id = this.generateId(attributeDescriptor, parentField, index);
+
+    let disabled = '';
+    if(attributeDescriptor.data.readonly) {
+        disabled = 'disabled="disabled"';
+    }
+
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
+
+    let content = ``;
+
+    // console.log('%cFieldRenderer.js :: 77 =============================', 'color: #f00; font-size: 1rem');
+    // console.log(remixIconDescriptor);
+
+    // list remix icons
+    content  += `<div>
+        <div class="flex gap-2 items-center">
+          <input x-model="${model}" class="hidden"/>
+          <template x-if="${model}">
+            <i class="selectedIcon" :class="${model}"></i>
+          </template>
+          <button
+            class="btn btn-primaary"
+            @click="
+              setCurrentModel(
+                '${attributeDescriptor.data.code}',
+                ${parentField ? "'" + parentField.data.code + "'" : 'null'},
+                '${index}'
+              )
+              showIconSelector(event)
+            "
+          >Select</button>
+        </div>
+    </div>`;
+
+    return content;
+  }
 
 
   renderText(attributeDescriptor, parentField, index) {
@@ -370,10 +416,6 @@ class FieldRenderer
     const value = this.store.getValue(attributeDescriptor, parentField, index);
 
     let content = ``;
-
-    console.log('%cFieldRenderer.js :: 371 =============================', 'color: #f00; font-size: 1rem');
-    console.log(value);
-
 
     content += `
       <div class="flex flex-col">

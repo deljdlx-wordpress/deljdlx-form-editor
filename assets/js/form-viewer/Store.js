@@ -3,6 +3,10 @@ const store = {
     descriptor: {},
 
 
+    icons: remixIconDescriptor,
+    selectedIconPanel: 0,
+
+
     descriptors: {},
     attributes: {},
     attributesErrors: {},
@@ -11,6 +15,38 @@ const store = {
     currentAttributeCode: null,
     currentParentAttributeCode: null,
     renderer: null,
+
+
+    showIconSelector(event) {
+
+        const iconSelector = document.querySelector('#icon-selector');
+        iconSelector.classList.remove('hidden');
+
+        // set position to the clicked button
+        iconSelector.style.top = event.clientY + 'px';
+        iconSelector.style.left = event.clientX + 'px';
+    },
+
+    hideIconSelector() {
+        const iconSelector = document.querySelector('#icon-selector');
+        iconSelector.classList.add('hidden');
+    },
+
+    selectIconPanel() {
+        if(!this.selectedIconPanel) {
+            return;
+        }
+        document.querySelectorAll('.icon-panel').forEach((panel) => {
+            panel.classList.add('hidden');
+        });
+        document.querySelector('#icon-tab-' + this.selectedIconPanel).classList.remove('hidden')
+    },
+
+    selectIcon(icon) {
+        this.hideIconSelector();
+        this.setCurrentModelValue(icon);
+        // this.attributes[this.currentAttributeCode].values[this.currentValueIndex] = icon;
+    },
 
     loadDescriptor(descriptor) {
         this.descriptor = Object.freeze(descriptor);
@@ -173,6 +209,18 @@ const store = {
 
     // ===================================================
 
+    setCurrentModel(attributeCode, parentAttributeCode, index) {
+        this.currentAttributeCode = attributeCode;
+        this.currentParentAttributeCode = parentAttributeCode;
+        this.currentValueIndex = index;
+    },
+
+    resetCurrentModel() {
+        this.currentAttributeCode = null;
+        this.currentParentAttributeCode = null;
+        this.currentValueIndex = null;
+    },
+
     resetValue(attributeCode, parentAttributeCode, index) {
         if (parentAttributeCode) {
             this.attributes[parentAttributeCode].values[index][attributeCode] = null;
@@ -187,6 +235,15 @@ const store = {
         this.attributes[attributeCode].values.splice(index, 1);
     },
 
+    setCurrentModelValue(value) {
+        this.setValue(
+            this.currentAttributeCode,
+            this.currentParentAttributeCode,
+            this.currentValueIndex,
+            value
+        );
+    },
+
     setValue(attributeCode, parentFieldCode, index, value,) {
         if (parentFieldCode) {
             if(!this.attributes[parentFieldCode]) {
@@ -194,13 +251,14 @@ const store = {
             }
 
             if(!this.attributes[parentFieldCode].values) {
-                console.error('No values for attribute ' + parentFieldCode + '[' + index + ']');
+                this.attributes[parentFieldCode].values = [];
             }
+
             this.attributes[parentFieldCode].values[index][attributeCode] = value;
             return this.attributes[parentFieldCode].values[index][attributeCode];
         }
-        this.attributes[attributeCode].values[index] = value;
 
+        this.attributes[attributeCode].values[index] = value;
         return this.attributes[attributeCode].values[index];
     },
 
@@ -317,9 +375,17 @@ const store = {
     // ===================================================
 
     openMediaLibrary(attributeCode, parentAttributeCode, index) {
-        this.currentAttributeCode = attributeCode;
-        this.currentParentAttributeCode = parentAttributeCode;
-        this.currentValueIndex = index;
+
+
+        this.setCurrentModel(
+            attributeCode,
+            parentAttributeCode,
+            index
+        );
+
+        // this.currentAttributeCode = attributeCode;
+        // this.currentParentAttributeCode = parentAttributeCode;
+        // this.currentValueIndex = index;
 
         // JDLX_TODO  monkey patch, images are not displayed at first load
         setTimeout(() => {
