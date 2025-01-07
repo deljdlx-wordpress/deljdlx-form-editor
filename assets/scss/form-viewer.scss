@@ -61,7 +61,7 @@
 
 
       .attribute-container {
-          padding: 1rem;
+          padding: 0.5rem;
           height: 100%;
           background-color: #fff;
           border: solid 1px #ccc;
@@ -70,14 +70,10 @@
           border: solid 2px $main-color;
 
 
-          .fieldset-header {
-              height: 3rem;
-              background-color: #aaa;
-              color: #fff;
-              margin: -0.5rem -0.5rem 1rem -0.5rem;
-              padding: 4px;
-              border-radius: 0.5rem 0.5rem 0 0;
+          .fields-group-container {
+            gap: 4px;
           }
+
 
           fieldset {
               position: relative;
@@ -85,11 +81,24 @@
 
           .value-container {
               position: relative;
-              padding: 0.5rem;
+              padding: 4px;
               // background-color: #fff;
               // border: solid 1px #ccc;
               border-radius: $border-radius;
               box-shadow: 3px 3px 3px rgba(0, 0, 0, 0.1);
+
+              .delete-value-button {
+                position: absolute;
+                right: 0;
+                top:0;
+                color: #000;
+                font-size: 1.5rem;
+                z-index: 100;
+                &:hover {
+                    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+                }
+            }
+
           }
 
         }

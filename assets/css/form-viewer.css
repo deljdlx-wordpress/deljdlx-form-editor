@@ -3,23 +3,16 @@
   font-weight: bold;
 }
 
-.attribute-values-container {
-  gap: 1rem;
-}
 
 /* ========================================== */
 
-.fields-group-container {
-  /* display: flex;
-  flex-direction: column;
-  width: 100% */
-}
+
 
 .subfield-container {
   background-color: #eee;
   position: relative;
   margin-bottom: 1rem;
-  padding: 1rem;
+  padding: 4px;
   /* flex-grow: 1; */
 }
 

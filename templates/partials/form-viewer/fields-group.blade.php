@@ -12,17 +12,20 @@
         "
     >
 
-        {{-- Delete fields group part --}}
-        <div class="fieldset-header flex justify-end items-center">
+
+
+            {{-- Delete fields group part --}}
             <button
+                title="Supprimer"
                 x-show="subValueIndex > 0"
                 x-on:click="deleteValue(
                     attributeDescriptor.data.code,
                     subValueIndex,
                 )"
-                class="btn ri-delete-bin-fill"
+                class="ri-close-circle-fill delete-value-button"
             ></button>
-        </div>
+
+
 
 
         <div class="fields-group-container grid grid-cols-12">
@@ -38,7 +41,9 @@
                         <div
                             class="subfield-container  w-full"
                         >
-                            <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
+                            <div class="flex items-center">
+                                <h4 class="subfield-name" x-html="subfieldDescriptor.text"></h4>
+                            </div>
                             <div x-html="renderFieldset(
                                 subfieldDescriptor,
                                 attributeDescriptor,
