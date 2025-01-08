@@ -1,3 +1,6 @@
 .form-editor {
   background-color: #fff;
 }
+.form-editor #skill-tree-name {
+  border: solid 1px #000;
+}

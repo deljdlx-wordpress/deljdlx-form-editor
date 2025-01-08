@@ -11,8 +11,8 @@
     <div>
 
         <section class="skill-tree-editor__head">
-            <div class="flex items-stretch gap-1">
-                <input id="skill-tree-name" name="skill-tree-name" type="text" class="input input-bordered input-sm" placeholder=""  value="{{$skillTree->post_title}}"/>
+            <div class="flex gap-2">
+                <input id="skill-tree-name" name="skill-tree-name" type="text" class="skill-tree-name" placeholder=""  value="{{$skillTree->post_title}}"/>
                 <button id="save-trigger" class="btn btn-primary btn-sm">Enregistrer</button>
             </div>
         </section>

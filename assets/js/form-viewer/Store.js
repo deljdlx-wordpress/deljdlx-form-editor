@@ -197,13 +197,19 @@ const store = {
         const response = await fetch('?save=1', options)
         const json = await response.json();
 
-        if (!document.getElementById('entity_id').value) {
+        console.log('%cStore.js :: 200 =============================', 'color: #f00; font-size: 1rem');
+        console.log(json);
 
+        if (!document.getElementById('entity_id').value) {
             // remove ?entity_id= from url
             let url = document.location.href;
             url = url.split('?')[0];
             url = url.split('#')[0];
             document.location.href = url + '?entity_id=' + json.entity.ID;
+        }
+        else {
+            // reload data
+            this.loadValues(json.attributes);
         }
     },
 
