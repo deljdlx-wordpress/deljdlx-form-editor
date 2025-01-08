@@ -15,6 +15,9 @@ class FieldRenderer
       case 'text':
         content += this.renderText(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
+      case 'textarea':
+          content += this.renderTextarea(attributeDescriptor, parentFieldDescriptor, index, model);
+          break;
       case 'number':
         content += this.renderNumber(attributeDescriptor, parentFieldDescriptor, index, model);
         break;
@@ -45,6 +48,9 @@ class FieldRenderer
       case 'icon':
           content += this.renderIcon(attributeDescriptor, parentFieldDescriptor, index, model);
           break;
+      case 'json':
+          content += this.renderJson(attributeDescriptor, parentFieldDescriptor, index, model);
+            break;
         // case 'static':
         //   content += this.renderSelect(attributeDescriptor, parentFieldDescriptor, index, model);
         //   break;
@@ -62,20 +68,8 @@ class FieldRenderer
 
 
   renderIcon(attributeDescriptor, parentField, index) {
-
-    const id = this.generateId(attributeDescriptor, parentField, index);
-
-    let disabled = '';
-    if(attributeDescriptor.data.readonly) {
-        disabled = 'disabled="disabled"';
-    }
-
     let model = this.store.getModel(attributeDescriptor, parentField, index);
-
     let content = ``;
-
-    // console.log('%cFieldRenderer.js :: 77 =============================', 'color: #f00; font-size: 1rem');
-    // console.log(remixIconDescriptor);
 
     // list remix icons
     content  += `<div>
@@ -103,18 +97,12 @@ class FieldRenderer
 
 
   renderText(attributeDescriptor, parentField, index) {
-
     const id = this.generateId(attributeDescriptor, parentField, index);
-
     let disabled = '';
     if(attributeDescriptor.data.readonly) {
         disabled = 'disabled="disabled"';
     }
-
     let model = this.store.getModel(attributeDescriptor, parentField, index);
-
-    //const disabled = (attributeDescriptor.data.readonly ?? false) ? 'disabled' : '';
-
 
     return `
         <input
@@ -125,6 +113,46 @@ class FieldRenderer
             class="input input-bordered input-primary w-full grow"
             ${disabled}"
         />
+    `;
+  }
+
+
+  renderJson(attributeDescriptor, parentField, index) {
+    const id = this.generateId(attributeDescriptor, parentField, index);
+    let disabled = '';
+    if(attributeDescriptor.data.readonly) {
+        disabled = 'disabled="disabled"';
+    }
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
+
+    return `
+        <textarea
+            id="${id}"
+            x-model="JSON.stringify(${model}, null, 2)"
+            placeholder="Type here"
+            class="input input-bordered input-primary w-full grow json-value"
+            ${disabled}"
+        ></textarea>
+    `;
+  }
+
+
+  renderTextarea(attributeDescriptor, parentField, index) {
+    const id = this.generateId(attributeDescriptor, parentField, index);
+    let disabled = '';
+    if(attributeDescriptor.data.readonly) {
+        disabled = 'disabled="disabled"';
+    }
+    let model = this.store.getModel(attributeDescriptor, parentField, index);
+
+    return `
+        <textarea
+            id="${id}"
+            x-model="${model}"
+            placeholder="Type here"
+            class="input input-bordered input-primary w-full grow"
+            ${disabled}"
+        ></textarea>
     `;
   }
 

@@ -28,6 +28,7 @@
                     <select class="w-full max-w-xs outline-none" x-model="selectedNode.data.type">
                         <option disabled selected>Type de champs</option>
                         <option value="text">Texte</option>
+                        <option value="textarea">Textarea</option>
                         <option value="wysiwyg">Texte riche</option>
                         <option value="number">Nombre</option>
                         <option value="rating">Rating</option>
@@ -44,6 +45,8 @@
 
                         <option value="video">Video</option>
                         <option value="map">Map</option>
+
+                        <option value="json">JSON</option>
 
                         {{-- TODO - require a wysiwyg initialization refactorization --}}
                         {{-- <option value="static">Contenu statique</option> --}}
@@ -137,6 +140,15 @@
                     <label class="flex items-center gap-2">
                       <span class="label-text">Champ obligatoire</span>
                       <input type="checkbox" class="checkbox" x-model="selectedNode.data.mandatory" :checked="selectedNode.data.mandatory ?? false"/>
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div class="form-control" style="width: 150px">
+                    <label class="flex items-center gap-2">
+                      <span class="label-text">Non modifiable</span>
+                      <input type="checkbox" class="checkbox" x-model="selectedNode.data.notUpdatable" :checked="selectedNode.data.notUpdatable ?? false"/>
                     </label>
                 </div>
             </fieldset>
