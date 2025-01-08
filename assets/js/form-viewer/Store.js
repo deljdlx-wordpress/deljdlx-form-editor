@@ -4,7 +4,7 @@ const store = {
 
 
     icons: remixIconDescriptor,
-    selectedIconPanel: 0,
+    selectedIconPanel: null,
 
 
     descriptors: {},
